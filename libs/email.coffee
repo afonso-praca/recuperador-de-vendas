@@ -3,7 +3,7 @@ Module dependencies.
 ###
 
 emailjs = require 'emailjs'
-config = require '../config/email-config'
+config = require '../config/email'
 
 class Email
 
