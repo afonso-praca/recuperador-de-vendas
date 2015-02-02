@@ -6,14 +6,14 @@ request = require 'request'
 Q = require 'q'
 DeciderActions = require '../config/decider-actions'
 Authenticator = require './authenticator'
-Mailer = require '../libs/email'
+
 Keen = require 'keen.io'
 
 class Decider
   constructor: (@keen) ->
     throw new Error '"keen" parameter is required' if not @keen?
 
-    @email = new Mailer()
+
     @auth = new Authenticator "lab@vtex.com.br", "2194031020"
 
   calculateActions: (health) =>
