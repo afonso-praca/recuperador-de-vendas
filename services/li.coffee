@@ -1,12 +1,10 @@
 Q = require 'q'
 request = require 'request'
 liConfig = require '../config/li.coffee'
-Mailer = require '../libs/email'
 
 class LIService
 	constructor: () ->
     @baseUrl = "http://api.lojaintegrada.com.br";
-    @email = new Mailer()
 
   getOrders: () ->
     deferred = Q.defer()

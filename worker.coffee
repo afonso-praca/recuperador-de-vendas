@@ -1,6 +1,8 @@
 LIService = require './services/li'
 liService = new LIService();
 _ = require 'underscore'
+Mailer = require './libs/email'
+email = new Mailer()
 
 ONE_MIN = 60 * 1000
 
@@ -11,6 +13,11 @@ queryAnalyzeAndAct = ->
     _.each body.objects, (order) ->
       console.log order.resource_uri
       liService.getOrder(order.resource_uri)
+
+    email.sendEmail({
+      name: "sunda"
+      orderId: "123"
+    })
 
 try
   # Run every minute
