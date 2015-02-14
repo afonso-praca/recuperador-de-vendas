@@ -1,6 +1,7 @@
 # Logs
 logs
 *.log
+keys.sh
 
 # Runtime data
 pids
