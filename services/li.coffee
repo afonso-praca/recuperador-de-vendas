@@ -10,18 +10,18 @@ class LIService
     deferred = Q.defer()
     options =
       url: @baseUrl + "/api/v1/pedido/search/?since_numero=1540&situacao_id=8&limit=10&format=json&chave_api=#{liConfig.chave_api}&chave_aplicacao=#{liConfig.chave_aplicacao}"
-    console.log "Fetching orders = #{options.url}"
     request options, (err, response, body) ->
       deferred.resolve body
     return deferred.promise
 
   getOrder: (orderUri) ->
+    deferred = Q.defer()
+    console.log orderUri
     options =
       url: @baseUrl + "#{orderUri}?format=json&chave_api=#{liConfig.chave_api}&chave_aplicacao=#{liConfig.chave_aplicacao}"
-
-    console.log "Fetching order"
     request options, (err, response, body) ->
-      console.log body
-
+      return deferred.reject new Error(err) if err
+      deferred.resolve body
+    return deferred.promise
 
 module.exports = LIService
