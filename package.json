@@ -13,12 +13,12 @@
     "test": "mocha --compilers coffee:coffee-script/register --reporter spec test/**"
   },
   "engines": {
-    "node": "0.10.x",
+    "node": "0.12.x",
     "npm": "1.2.x"
   },
   "dependencies": {
     "adaro": "~0.1.5",
-    "async": "latest",
+    "async": "0.9.0",
     "coffee-script": "1.7.*",
     "colors": "~0.6.2",
     "connect-flash": "latest",
