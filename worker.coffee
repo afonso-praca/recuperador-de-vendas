@@ -14,8 +14,7 @@ queryAnalyzeAndAct = ->
     ordersRequests = []
     _.each body.objects, (order) ->
       ordersRequests.push liService.getOrder(order.resource_uri)
-    Q.all(ordersRequests).spread () ->
-      orders = _.values arguments
+    Q.all(ordersRequests).then (orders) ->
       decider.analyseCanceledOrders(orders)
 
 mongoose.connect(process.env.MONGOLAB_URI)
