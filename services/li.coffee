@@ -9,7 +9,7 @@ class LIService
   getOrders: () ->
     deferred = Q.defer()
     options =
-      url: @baseUrl + "/api/v1/pedido/search/?since_numero=1540&situacao_id=8&limit=10&format=json&chave_api=#{liConfig.chave_api}&chave_aplicacao=#{liConfig.chave_aplicacao}"
+      url: @baseUrl + "/api/v1/pedido/search/?since_numero=1&situacao_id=8&limit=200&format=json&chave_api=#{liConfig.chave_api}&chave_aplicacao=#{liConfig.chave_aplicacao}"
     request options, (err, response, body) ->
       deferred.resolve body
     return deferred.promise
