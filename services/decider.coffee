@@ -9,13 +9,14 @@ class Decider
   ##################################
   # PRIVATE METHODS                #
   ##################################
-  
+
   _CanceledOrders = mongoose.model('CanceledOrders', orderSchema)
 
   _sendEmailToClient = (order) ->
     email.sendEmail({
       name: order.cliente.nome
       orderId: order.numero
+      createDate: new Date order.data_criacao
     })
 
   _analyseOrder = (orders) ->
