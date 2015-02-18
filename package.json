@@ -34,6 +34,7 @@
     "semver": "~2.2.1",
     "simple-statistics": "^0.9.0",
     "underscore": "latest",
+    "moment": "2.9.0",
     "version-map": "0.15.x"
   },
   "devDependencies": {
