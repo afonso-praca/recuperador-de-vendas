@@ -14,26 +14,29 @@ class Decider
   constructor: () ->
     @CanceledOrders = mongoose.model('CanceledOrders', orderSchema)
 
-  analyseCanceledOrders: (orders) ->
+  analyseCanceledOrders: (retrivedOrders) ->
     console.log 'analyseCanceledOrders'
 
-    for order in orders
+    for order in retrivedOrders
       order = JSON.parse(order)
-      sendEmailToClient(order)
 
       orderToCancel = new @CanceledOrders
         orderId: order.numero
         clientName: order.cliente.nome
+        clientId: order.cliente.id
+        clientEmail: order.cliente.email
+        createDate: new Date order.data_criacao
 
-      orderToCancel.save((err, order) ->
-        if (err)
-          console.error err
-        console.log order
-      )
-
-      @CanceledOrders.find({ oderId: order.numero }, (err, order) ->
-        if !err
-          console.log order
+      @CanceledOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
+        if error
+          return new Error(err)
+        if recoveredOrders.length is 0
+          sendEmailToClient(order)
+          orderToCancel.save((err, savedOrder) ->
+            if err
+              return new Error(err)
+            console.log 'Order saved -> ' + savedOrder
+          )
       )
 
 module.exports = Decider
