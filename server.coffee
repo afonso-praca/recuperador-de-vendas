@@ -22,7 +22,7 @@ onDbConnected = ->
   console.log 'connected to mongo db'
   try
     # RUN EVERY HOUR
-    setInterval queryAnalyzeAndAct, ONE_MIN * 5
+    setInterval queryAnalyzeAndAct, ONE_MIN * 15
     # RUN FIRST TIME
     queryAnalyzeAndAct()
   catch e
