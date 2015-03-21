@@ -23,15 +23,15 @@ class Email
   sendEmail: (data, callback) ->
     text = "Olá #{data.name.split(" ")[0]}, "
     text += "Seu pedido de número #{data.orderId}, criado em #{moment(data.createDate).format('DD/MM/YY')}, não foi concluído com sucesso. "
-    text += "Gostaria de saber se você teve alguma dificuldade e se posso te ajudar de alguma maneira? Você é muito importante para nossa loja. "
-    text += "Para realizar sua compra basta acessar http://www.pilateslovers.com.br/ "
-    text += "Daniela Soria, Pilates Lovers"
+    text += "Gostaria de saber se você teve alguma dificuldade (as vezes o processo de pagamento é meio complicado) e se posso te ajudar de alguma maneira? "
+    text += "Para realizar uma nova compra basta acessar http://www.pilateslovers.com.br/ "
+    text += "Daniela Soria, Loja Pilates Lovers"
 
-    htmlText = "<html>Olá <strong>#{data.name.split(" ")[0]}</strong>,<br/>"
+    htmlText = "<html>Olá <strong>#{data.name.split(" ")[0]}</strong>,<br/><br/>"
     htmlText +=  "Seu pedido de número #{data.orderId}, criado em #{moment(data.createDate).format('DD/MM/YY')}, não foi concluído com sucesso. "
-    htmlText +=  "Gostaria de saber se você teve alguma dificuldade e se posso te ajudar de alguma maneira? Você é muito importante para nossa loja. "
-    htmlText +=  "Para realizar sua compra basta acessar http://www.pilateslovers.com.br/ "
-    htmlText +=  "<br/><strong>Daniela Soria</strong>, <br/>Pilates Lovers</html>"
+    htmlText +=  "Gostaria de saber se você teve alguma dificuldade (as vezes o processo de pagamento é meio complicado) e se posso te ajudar de alguma maneira? "
+    htmlText +=  "Para realizar uma nova compra basta acessar http://www.pilateslovers.com.br/ "
+    htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers</html>"
 
     options = @emailOptions
 
