@@ -1,6 +1,6 @@
 {
   "name": "recuperador-de-vendas",
-  "description": "recuperador-de-vendas",
+  "description": "recuperador de vendas para api loja integrada",
   "version": "0.0.1",
   "private": false,
   "repository": {
