@@ -9,7 +9,7 @@
   },
   "main": "worker.js",
   "scripts": {
-    "start": "node_modules/.bin/coffee worker.coffee"
+    "start": "node worker.js"
   },
   "engines": {
     "node": "0.10.x",
