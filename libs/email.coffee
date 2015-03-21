@@ -12,8 +12,7 @@ class Email
     @server = emailjs.server.connect config
     @emailOptions =
       from: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
-      to: "Afonso Praça <afonsoinfo@gmail.com>"
-      cc: "Afonso Praça <afonsoinfo@gmail.com>"
+      cc: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
 
   ##################################
   # PUBLIC METHODS                 #
@@ -34,7 +33,7 @@ class Email
     htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers</html><br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br"
 
     options = @emailOptions
-
+    options.to = "#{data.name} <#{data.email}>"
     options.subject = "Pedido #{data.orderId} - Atendimento"
     options.text = text
     options.attachment =

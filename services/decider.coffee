@@ -17,6 +17,7 @@ class Decider
       name: order.cliente.nome
       orderId: order.numero
       createDate: new Date order.data_criacao
+      email: order.cliente.email
     })
 
   _analyseOrder = (orders) ->
