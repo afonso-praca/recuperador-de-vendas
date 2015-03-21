@@ -6,7 +6,7 @@
   "author": "Afonso Praça <afonsoinfo@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/afonso-praca/recuperador-de-vendas.git"
+    "url": "git@github.com:afonso-praca/recuperador-de-vendas.git"
   },
   "main": "index.js",
   "scripts": {
@@ -32,8 +32,7 @@
     "request": "~2.49.0",
     "semver": "~2.2.1",
     "underscore": "latest",
-    "moment": "~2.9.0",
-    "version-map": "0.15.x"
+    "moment": "~2.9.0"
   },
   "devDependencies": {
     "grunt-contrib-coffee": "~0.12.0",
