@@ -9,7 +9,7 @@
   },
   "main": "worker.js",
   "scripts": {
-    "start": "node worker.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": "0.10.x",
