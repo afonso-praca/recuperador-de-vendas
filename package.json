@@ -7,9 +7,9 @@
     "type": "git",
     "url": "git@github.com:afonso-praca/recuperador-de-vendas.git"
   },
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node_modules/.bin/coffee server.coffee"
   },
   "engines": {
     "node": "0.10.x",

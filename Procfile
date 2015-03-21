@@ -1,1 +1,1 @@
-web: coffee server.coffee
+worker: npm start
