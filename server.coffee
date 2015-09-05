@@ -9,13 +9,23 @@ decider = new DeciderService();
 ONE_MIN = 60 * 1000
 
 queryAnalyzeAndAct = ->
-  liService.getOrders().then (body) ->
+  # CANCELED ORDERS
+  liService.getOrders(1957, 8).then (body) ->
     body = JSON.parse body
     ordersRequests = []
     _.each body.objects, (order) ->
       ordersRequests.push liService.getOrder(order.resource_uri)
     Q.all(ordersRequests).then (orders) ->
-      decider.analyseCanceledOrders(orders)
+      decider.analyseCanceledOrders orders
+
+  # PAYMENT PENDING ORDERS
+  liService.getOrders(1, 2).then (body) ->
+    body = JSON.parse body
+    paymentPendidgOrdersRequests = []
+    _.each body.objects, (order) ->
+      paymentPendidgOrdersRequests.push liService.getOrder(order.resource_uri)
+    Q.all(paymentPendidgOrdersRequests).then (orders) ->
+      decider.analysePaymentPendingOrders orders
 
 mongoose.connect(process.env.MONGOLAB_URI)
 onDbConnected = ->

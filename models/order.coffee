@@ -6,5 +6,6 @@ orderSchema = mongoose.Schema
   clientName: String
   clientEmail: String
   createDate: Date
+  totalValue: String
 
 module.exports = orderSchema
