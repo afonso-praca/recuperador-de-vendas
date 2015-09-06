@@ -38,7 +38,7 @@ class Decider
 
         orderToCancel.save((err, savedOrder) ->
           return new Error(err) if err
-          console.log 'Order saved -> ' + savedOrder
+          console.log 'Canceled order saved -> ' + savedOrder
           _sendEmailToClient(order, 'canceled')
           orders.shift()
           _analyseOrder(orders)
@@ -53,7 +53,10 @@ class Decider
     order = JSON.parse(orders[0])
     _PaymentPendingOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
       return new Error(err) if error
-      if recoveredOrders.length is 0
+      orderDate = new Date(order.data_criacao)
+      compareDate = new Date()
+      compareDate.setTime(compareDate.getTime() - (1000 * 60 * 60 * 24 * 2))
+      if (recoveredOrders.length is 0) and (orderDate.getTime() < compareDate.getTime())
         orderToSendPaymentEmail = new _PaymentPendingOrders
           orderId: order.numero
           clientName: order.cliente.nome
@@ -64,14 +67,14 @@ class Decider
 
         orderToSendPaymentEmail.save((err, savedOrder) ->
           return new Error(err) if err
-          console.log 'Order saved -> ' + savedOrder
+          console.log 'Pending order saved -> ' + savedOrder
           _sendEmailToClient(order, 'paymentPending')
           orders.shift()
           _analysePaymentPendingOrders(orders)
         )
       else
         orders.shift()
-        _analyseOrder(orders)
+        _analysePaymentPendingOrders(orders)
     )
 
   ##################################

@@ -12,7 +12,7 @@ class Email
     @server = emailjs.server.connect config
     @emailOptions =
       from: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
-      cc: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
+#      cc: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
 
     @createCanceledOrderEmail = (data, emailOptions) =>
       text = "Olá #{data.name.split(" ")[0]}, "
