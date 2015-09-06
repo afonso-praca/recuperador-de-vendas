@@ -8,25 +8,39 @@ liService = new LIService();
 decider = new DeciderService();
 ONE_MIN = 60 * 1000
 
-queryCanceledOrders = ->
-  # CANCELED ORDERS
-  liService.getOrders(1957, 8).then (body) ->
-    body = JSON.parse body
-    ordersRequests = []
-    _.each body.objects, (order) ->
-      ordersRequests.push liService.getOrder(order.resource_uri)
-    Q.all(ordersRequests).then (orders) ->
-      decider.analyseCanceledOrders orders
+makeOrdersRequests = (orders, callback) ->
+  ordersRequests = []
+  _.each orders, (order) ->
+    ordersRequests.push liService.getOrder(order.resource_uri)
+  Q.all(ordersRequests).then (ordersResult) ->
+    callback ordersResult
 
-queryPaymentPendingOrders = ->
-  # PAYMENT PENDING ORDERS
-  liService.getOrders(1, 2).then (body) ->
+# CANCELED ORDERS
+queryCanceledOrders = ->
+  liService.getOrders(8, { sinceOrder: 1957 }).then (body) ->
     body = JSON.parse body
-    paymentPendidgOrdersRequests = []
-    _.each body.objects, (order) ->
-      paymentPendidgOrdersRequests.push liService.getOrder(order.resource_uri)
-    Q.all(paymentPendidgOrdersRequests).then (orders) ->
+    makeOrdersRequests(body.objects, (orders) ->
+      decider.analyseCanceledOrders orders
+    )
+
+# PAYMENT PENDING ORDERS
+queryPaymentPendingOrders = ->
+  liService.getOrders(2, { sinceOrder: 1 }).then (body) ->
+    body = JSON.parse body
+    makeOrdersRequests(body.objects, (orders) ->
       decider.analysePaymentPendingOrders orders
+    )
+
+# DELIVERED ORDERS
+queryDeliveredOrders = ->
+  compareDate = new Date()
+  compareDate.setTime(compareDate.getTime() - (1000 * 60 * 60 * 24 * 15))
+  liService.getOrders(14, { lastUpdate: [compareDate.getFullYear(), compareDate.getMonth()+1, compareDate.getDate()].join("-") })
+    .then (body) ->
+      body = JSON.parse body
+      makeOrdersRequests(body.objects, (orders) ->
+        decider.analyseDeliveredOrders orders
+      )
 
 mongoose.connect(process.env.MONGOLAB_URI)
 onDbConnected = ->
@@ -35,9 +49,11 @@ onDbConnected = ->
     # RUN ON INTERVAL
     setInterval queryCanceledOrders, ONE_MIN * 15
     setInterval queryPaymentPendingOrders, ONE_MIN * 480
+    setInterval queryDeliveredOrders, ONE_MIN * 240
     # RUN FIRST TIME
     queryCanceledOrders()
     queryPaymentPendingOrders()
+    queryDeliveredOrders()
   catch e
     console.error "Error!", e
 
