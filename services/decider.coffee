@@ -22,7 +22,7 @@ class Decider
       totalValue: String(order.valor_total).replace('.', ',')
     }, type)
 
-  _analyseOrder = (orders) ->
+  _analyseCanceledOrders = (orders) ->
     return false if orders.length is 0
     order = JSON.parse(orders[0])
     _CanceledOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
@@ -41,11 +41,11 @@ class Decider
           console.log 'Canceled order saved -> ' + savedOrder
           _sendEmailToClient(order, 'canceled')
           orders.shift()
-          _analyseOrder(orders)
+          _analyseCanceledOrders(orders)
         )
       else
         orders.shift()
-        _analyseOrder(orders)
+        _analyseCanceledOrders(orders)
     )
 
   _analysePaymentPendingOrders = (orders) ->
@@ -86,7 +86,7 @@ class Decider
 
   analyseCanceledOrders: (orders) ->
     console.log 'analyseCanceledOrders'
-    _analyseOrder(orders)
+    _analyseCanceledOrders(orders)
 
   analysePaymentPendingOrders: (orders) ->
     console.log 'analysePaymentPendingOrders'

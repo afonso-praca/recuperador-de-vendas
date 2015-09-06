@@ -8,7 +8,7 @@ liService = new LIService();
 decider = new DeciderService();
 ONE_MIN = 60 * 1000
 
-queryAnalyzeAndAct = ->
+queryCanceledOrders = ->
   # CANCELED ORDERS
   liService.getOrders(1957, 8).then (body) ->
     body = JSON.parse body
@@ -18,6 +18,7 @@ queryAnalyzeAndAct = ->
     Q.all(ordersRequests).then (orders) ->
       decider.analyseCanceledOrders orders
 
+queryPaymentPendingOrders = ->
   # PAYMENT PENDING ORDERS
   liService.getOrders(1, 2).then (body) ->
     body = JSON.parse body
@@ -31,10 +32,12 @@ mongoose.connect(process.env.MONGOLAB_URI)
 onDbConnected = ->
   console.log 'connected to mongo db'
   try
-    # RUN EVERY HOUR
-    setInterval queryAnalyzeAndAct, ONE_MIN * 15
+    # RUN ON INTERVAL
+    setInterval queryCanceledOrders, ONE_MIN * 15
+    setInterval queryPaymentPendingOrders, ONE_MIN * 480
     # RUN FIRST TIME
-    queryAnalyzeAndAct()
+    queryCanceledOrders()
+    queryPaymentPendingOrders()
   catch e
     console.error "Error!", e
 
