@@ -75,6 +75,32 @@ class Email
 
       return options;
 
+    @createDeliveredOrderEmail = (data, emailOptions) =>
+      text = "Olá #{data.name.split(" ")[0]}, "
+      text += "Muito obrigado por ter comprado conosco. "
+      text += "Se tiver 3 minutos pra nos ajudar, pedimos a gentileza de responder essa pesquisa sobre sua compra. "
+      text += "https://docs.google.com/forms/d/1qTHvVks-NonP7GYUm9PM1H3gzgKw8g5AJ404-PX1nE0/viewform?usp=send_form "
+      text += "Daniela Soria, Loja Pilates Lovers"
+
+      htmlText = "<html>Olá <strong>#{data.name.split(" ")[0]}</strong>,<br/><br/>"
+      htmlText +=  "Muito obrigado por ter comprado conosco. "
+      htmlText +=  "Se tiver 3 minutos pra nos ajudar, pedimos a gentileza de responder essa pesquisa sobre sua compra. "
+      htmlText +=  '<iframe src="https://docs.google.com/forms/d/1qTHvVks-NonP7GYUm9PM1H3gzgKw8g5AJ404-PX1nE0/viewform?embedded=true" width="760" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>'
+      htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers</html><br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br"
+
+      options = emailOptions
+      #    options.to = "#{data.name} <#{data.email}>"
+      options.to = "Afonso <afonsoinfo@gmail.com>"
+      options.subject = "Pesquisa de satisfação - Pedido #{data.orderId}"
+      options.text = text
+      options.attachment =
+        [
+          data: htmlText
+          alternative:true
+        ]
+
+      return options;
+
 
   ##################################
   # PUBLIC METHODS                 #
@@ -88,6 +114,8 @@ class Email
       options = @createCanceledOrderEmail(data, emailOptions)
     if (type is 'paymentPending')
       options = @createPaymentPendingOrderEmail(data, emailOptions)
+    if (type is 'delivered')
+      options = @createDeliveredOrderEmail(data, emailOptions)
 
     @server.send options, callback
 
