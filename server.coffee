@@ -6,7 +6,10 @@ Q = require 'q'
 
 liService = new LIService();
 decider = new DeciderService();
+
 ONE_MIN = 60 * 1000
+ONE_HOUR = ONE_MIN * 60
+ONE_DAY = ONE_HOUR * 24
 
 makeOrdersRequests = (orders, callback) ->
   ordersRequests = []
@@ -34,7 +37,7 @@ queryPaymentPendingOrders = ->
 # DELIVERED ORDERS
 queryDeliveredOrders = ->
   compareDate = new Date()
-  compareDate.setTime(compareDate.getTime() - (1000 * 60 * 60 * 24 * 15))
+  compareDate.setTime(compareDate.getTime() - (15 * ONE_DAY))
   liService.getOrders(14, { lastUpdate: [compareDate.getFullYear(), compareDate.getMonth()+1, compareDate.getDate()].join("-") })
     .then (body) ->
       body = JSON.parse body
@@ -48,8 +51,8 @@ onDbConnected = ->
   try
     # RUN ON INTERVAL
     setInterval queryCanceledOrders, ONE_MIN * 15
-    setInterval queryPaymentPendingOrders, ONE_MIN * 480
-    setInterval queryDeliveredOrders, ONE_MIN * 240
+    setInterval queryPaymentPendingOrders, ONE_HOUR * 3
+    setInterval queryDeliveredOrders, ONE_HOUR * 6
     # RUN FIRST TIME
     queryCanceledOrders()
     queryPaymentPendingOrders()

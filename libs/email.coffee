@@ -12,7 +12,7 @@ class Email
     @server = emailjs.server.connect config
     @emailOptions =
       from: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
-#      cc: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
+      cc: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
 
     @createCanceledOrderEmail = (data, emailOptions) =>
       text = "Olá #{data.name.split(" ")[0]}, "
@@ -32,8 +32,7 @@ class Email
       htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers</html><br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br"
 
       options = emailOptions
-      #    options.to = "#{data.name} <#{data.email}>"
-      options.to = "Afonso <afonsoinfo@gmail.com>"
+      options.to = "#{data.name} <#{data.email}>"
       options.subject = "Pedido #{data.orderId} - Atendimento"
       options.text = text
       options.attachment =
@@ -63,8 +62,7 @@ class Email
       htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers</html><br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br"
 
       options = emailOptions
-      #    options.to = "#{data.name} <#{data.email}>"
-      options.to = "Afonso <afonsoinfo@gmail.com>"
+      options.to = "#{data.name} <#{data.email}>"
       options.subject = "Pedido de Venda #{data.orderId} - Aguardando Pagamento"
       options.text = text
       options.attachment =
@@ -83,10 +81,10 @@ class Email
       text += "Daniela Soria, Loja Pilates Lovers"
 
       htmlText = "<html>Olá <strong>#{data.name.split(" ")[0]}</strong>,<br/><br/>"
-      htmlText +=  "Muito obrigado por ter comprado conosco. "
-      htmlText +=  "Se tiver 3 minutos pra nos ajudar, pedimos a gentileza de responder essa pesquisa sobre sua compra. "
-      htmlText +=  '<iframe src="https://docs.google.com/forms/d/1qTHvVks-NonP7GYUm9PM1H3gzgKw8g5AJ404-PX1nE0/viewform?embedded=true" width="760" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>'
-      htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers</html><br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br"
+      htmlText +=  "Muito obrigado por ter comprado conosco. Agradecemos a confiança. "
+      htmlText +=  "Se tiver 3 minutos pra nos ajudar, pedimos a gentileza de responder essa pesquisa sobre sua compra.<br/><br/>"
+      htmlText +=  "https://docs.google.com/forms/d/1qTHvVks-NonP7GYUm9PM1H3gzgKw8g5AJ404-PX1nE0/viewform?usp=send_form"
+      htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers<br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br</html>"
 
       options = emailOptions
       #    options.to = "#{data.name} <#{data.email}>"
@@ -107,7 +105,7 @@ class Email
   ##################################
 
   sendEmail: (data, type, callback) ->
-    if (type isnt 'canceled' and type isnt 'paymentPending')
+    if (type isnt 'canceled' and type isnt 'paymentPending' and type isnt 'delivered')
       return false
     emailOptions = @emailOptions
     if (type is 'canceled')
