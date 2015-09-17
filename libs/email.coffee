@@ -81,7 +81,7 @@ class Email
       text += "Daniela Soria, Loja Pilates Lovers"
 
       htmlText = "<html>Olá <strong>#{data.name.split(" ")[0]}</strong>,<br/><br/>"
-      htmlText +=  "Muito obrigado por ter comprado conosco. Agradecemos a confiança. Como foi essa experiência?"
+      htmlText +=  "Muito obrigado por ter comprado conosco. Agradecemos a confiança. Como foi essa experiência? "
       htmlText +=  "Se tiver 3 minutos pra nos ajudar, pedimos a gentileza de responder essa pesquisa sobre sua compra.<br/><br/>"
       htmlText +=  "http://bit.ly/1NGIStO"
       htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers<br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br</html>"
