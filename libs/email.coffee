@@ -75,21 +75,20 @@ class Email
 
     @createDeliveredOrderEmail = (data, emailOptions) =>
       text = "Olá #{data.name.split(" ")[0]}, "
-      text += "Muito obrigado por ter comprado conosco. "
+      text += "Muito obrigado por ter comprado conosco. Agradecemos a confiança. Como foi essa experiência? "
       text += "Se tiver 3 minutos pra nos ajudar, pedimos a gentileza de responder essa pesquisa sobre sua compra. "
-      text += "https://docs.google.com/forms/d/1qTHvVks-NonP7GYUm9PM1H3gzgKw8g5AJ404-PX1nE0/viewform?usp=send_form "
+      text += "http://bit.ly/1NGIStO "
       text += "Daniela Soria, Loja Pilates Lovers"
 
       htmlText = "<html>Olá <strong>#{data.name.split(" ")[0]}</strong>,<br/><br/>"
-      htmlText +=  "Muito obrigado por ter comprado conosco. Agradecemos a confiança. "
+      htmlText +=  "Muito obrigado por ter comprado conosco. Agradecemos a confiança. Como foi essa experiência?"
       htmlText +=  "Se tiver 3 minutos pra nos ajudar, pedimos a gentileza de responder essa pesquisa sobre sua compra.<br/><br/>"
-      htmlText +=  "https://docs.google.com/forms/d/1qTHvVks-NonP7GYUm9PM1H3gzgKw8g5AJ404-PX1nE0/viewform?usp=send_form"
+      htmlText +=  "http://bit.ly/1NGIStO"
       htmlText +=  "<br/><br/><strong>Daniela Soria</strong>, <br/>Loja Pilates Lovers<br/>(21) 3593.4758<br/>http://www.pilateslovers.com.br</html>"
 
       options = emailOptions
-      #    options.to = "#{data.name} <#{data.email}>"
-      options.to = "Afonso <afonsoinfo@gmail.com>"
-      options.subject = "Pesquisa de satisfação - Pedido #{data.orderId}"
+      options.to = "#{data.name} <#{data.email}>"
+      options.subject = "Como foi sua experiência de compra? Pedido #{data.orderId}"
       options.text = text
       options.attachment =
         [
