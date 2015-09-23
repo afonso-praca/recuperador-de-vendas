@@ -23,20 +23,21 @@ class Decider
       totalValue: String(order.valor_total).replace('.', ',')
     }, type)
 
+  _createOrderObject = (order) ->
+    orderId: order.numero
+    clientName: order.cliente.nome
+    clientId: order.cliente.id
+    clientEmail: order.cliente.email
+    createDate: new Date order.data_criacao
+    totalValue: order.valor_total
+
   _analyseCanceledOrders = (orders) ->
     return false if orders.length is 0
     order = JSON.parse(orders[0])
     _CanceledOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
       return new Error(err) if error
       if recoveredOrders.length is 0
-        orderToCancel = new _CanceledOrders
-          orderId: order.numero
-          clientName: order.cliente.nome
-          clientId: order.cliente.id
-          clientEmail: order.cliente.email
-          createDate: new Date order.data_criacao
-          totalValue: order.valor_total
-
+        orderToCancel = new _CanceledOrders(_createOrderObject order)
         orderToCancel.save((err, savedOrder) ->
           return new Error(err) if err
           console.log 'Canceled order saved -> ' + savedOrder
@@ -58,14 +59,7 @@ class Decider
       compareDate = new Date()
       compareDate.setTime(compareDate.getTime() - (1000 * 60 * 60 * 24 * 2))
       if (recoveredOrders.length is 0) and (orderDate.getTime() < compareDate.getTime())
-        orderToSendPaymentEmail = new _PaymentPendingOrders
-          orderId: order.numero
-          clientName: order.cliente.nome
-          clientId: order.cliente.id
-          clientEmail: order.cliente.email
-          createDate: new Date order.data_criacao
-          totalValue: order.valor_total
-
+        orderToSendPaymentEmail = new _PaymentPendingOrders(_createOrderObject(order))
         orderToSendPaymentEmail.save((err, savedOrder) ->
           return new Error(err) if err
           console.log 'Pending order saved -> ' + savedOrder
@@ -84,14 +78,7 @@ class Decider
     _DeliveredOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
       return new Error(err) if error
       if (recoveredOrders.length is 0)
-        orderToSendDeliveredEmail = new _DeliveredOrders
-          orderId: order.numero
-          clientName: order.cliente.nome
-          clientId: order.cliente.id
-          clientEmail: order.cliente.email
-          createDate: new Date order.data_criacao
-          totalValue: order.valor_total
-
+        orderToSendDeliveredEmail = new _DeliveredOrders(_createOrderObject(order))
         orderToSendDeliveredEmail.save((err, savedOrder) ->
           return new Error(err) if err
           console.log 'Delivered order saved -> ' + savedOrder
