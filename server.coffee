@@ -18,32 +18,27 @@ makeOrdersRequests = (orders, callback) ->
   Q.all(ordersRequests).then (ordersResult) ->
     callback ordersResult
 
-# CANCELED ORDERS
-queryCanceledOrders = ->
-  liService.getOrders(8, { sinceOrder: 1957 }).then (body) ->
+queryOrders = (statusId, params, callback) ->
+  liService.getOrders(statusId, params).then (body) ->
     body = JSON.parse body
     makeOrdersRequests(body.objects, (orders) ->
-      decider.analyseCanceledOrders orders
+      callback orders
     )
+
+# CANCELED ORDERS
+queryCanceledOrders = ->
+  queryOrders(8, { sinceOrder: 1957 }, decider.analyseCanceledOrders)
 
 # PAYMENT PENDING ORDERS
 queryPaymentPendingOrders = ->
-  liService.getOrders(2, { sinceOrder: 1 }).then (body) ->
-    body = JSON.parse body
-    makeOrdersRequests(body.objects, (orders) ->
-      decider.analysePaymentPendingOrders orders
-    )
+  queryOrders(2, { sinceOrder: 1 }, decider.analysePaymentPendingOrders)
 
 # DELIVERED ORDERS
 queryDeliveredOrders = ->
   compareDate = new Date()
   compareDate.setTime(compareDate.getTime() - (15 * ONE_DAY))
-  liService.getOrders(14, { lastUpdate: [compareDate.getFullYear(), compareDate.getMonth()+1, compareDate.getDate()].join("-") })
-    .then (body) ->
-      body = JSON.parse body
-      makeOrdersRequests(body.objects, (orders) ->
-        decider.analyseDeliveredOrders orders
-      )
+  lastUpdateDate = [compareDate.getFullYear(), compareDate.getMonth()+1, compareDate.getDate()].join("-")
+  queryOrders(14, { lastUpdate: lastUpdateDate }, decider.analyseDeliveredOrders)
 
 mongoose.connect(process.env.MONGOLAB_URI)
 onDbConnected = ->
