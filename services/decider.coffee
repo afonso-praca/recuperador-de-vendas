@@ -40,7 +40,7 @@ class Decider
         orderToCancel = new _CanceledOrders(_createOrderObject order)
         orderToCancel.save((err, savedOrder) ->
           return new Error(err) if err
-          console.log 'Canceled order saved -> ' + savedOrder
+          console.log 'Canceled order saved -> ' + savedOrder.orderId
           _sendEmailToClient(order, 'canceled')
           orders.shift()
           _analyseCanceledOrders(orders)
@@ -62,7 +62,7 @@ class Decider
         orderToSendPaymentEmail = new _PaymentPendingOrders(_createOrderObject(order))
         orderToSendPaymentEmail.save((err, savedOrder) ->
           return new Error(err) if err
-          console.log 'Pending order saved -> ' + savedOrder
+          console.log 'Pending order saved -> ' + savedOrder.orderId
           _sendEmailToClient(order, 'paymentPending')
           orders.shift()
           _analysePaymentPendingOrders(orders)
@@ -81,7 +81,7 @@ class Decider
         orderToSendDeliveredEmail = new _DeliveredOrders(_createOrderObject(order))
         orderToSendDeliveredEmail.save((err, savedOrder) ->
           return new Error(err) if err
-          console.log 'Delivered order saved -> ' + savedOrder
+          console.log 'Delivered order saved -> ' + savedOrder.orderId
           _sendEmailToClient(order, 'delivered')
           orders.shift()
           _analyseDeliveredOrders(orders)
@@ -99,15 +99,12 @@ class Decider
     console.log 'Decider started'
 
   analyseCanceledOrders: (orders) ->
-    console.log 'analyseCanceledOrders'
     _analyseCanceledOrders(orders)
 
   analysePaymentPendingOrders: (orders) ->
-    console.log 'analysePaymentPendingOrders'
     _analysePaymentPendingOrders orders
 
   analyseDeliveredOrders: (orders) ->
-    console.log 'analyseDeliveredOrders'
     _analyseDeliveredOrders orders
 
 module.exports = Decider

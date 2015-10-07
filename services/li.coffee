@@ -28,7 +28,6 @@ class LIService
 
   getOrder: (orderUri) ->
     deferred = Q.defer()
-    console.log orderUri
     options =
       url: @baseUrl + "#{orderUri}?format=json&chave_api=#{liConfig.chave_api}&chave_aplicacao=#{liConfig.chave_aplicacao}"
     request options, (err, response, body) ->
