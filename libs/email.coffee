@@ -3,16 +3,11 @@ Module dependencies.
 ###
 
 emailjs = require 'emailjs'
-config = require '../config/email'
 moment = require 'moment'
 
 class Email
 
-  constructor: ->
-    @server = emailjs.server.connect config
-    @emailOptions =
-      from: "Loja Pilates Lovers <loja@pilateslovers.com.br>"
-
+  constructor: () ->
     @createCanceledOrderEmail = (data, emailOptions) =>
       text = "Olá #{data.name.split(" ")[0]}, "
       text += "Seu pedido de número #{data.orderId}, criado em #{moment(data.createDate).format('DD/MM/YYYY')}, não foi concluído com sucesso. "
@@ -102,10 +97,20 @@ class Email
   # PUBLIC METHODS                 #
   ##################################
 
-  sendEmail: (data, type, callback) ->
+  sendEmail: (account, data, type, callback) ->
+
+    server = emailjs.server.connect(
+      "user": account.emailAddress
+      "password": account.emailPassword
+      "host": account.emailHost
+      "ssl": account.emailUseSSL
+    )
+
+    emailOptions =
+      from: "#{account.name} <#{account.email}>"
+
     if (type isnt 'canceled' and type isnt 'paymentPending' and type isnt 'delivered')
       return false
-    emailOptions = @emailOptions
     if (type is 'canceled')
       options = @createCanceledOrderEmail(data, emailOptions)
     if (type is 'paymentPending')
@@ -113,6 +118,6 @@ class Email
     if (type is 'delivered')
       options = @createDeliveredOrderEmail(data, emailOptions)
 
-    @server.send options, callback
+    server.send options, callback
 
 module.exports = Email
