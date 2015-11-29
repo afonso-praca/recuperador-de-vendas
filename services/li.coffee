@@ -1,17 +1,16 @@
 Q = require 'q'
 request = require 'request'
-liConfig = require '../config/li.coffee'
 
 class LIService
   constructor: () ->
     @baseUrl = "http://api.lojaintegrada.com.br"
 
-  getOrders: (statusId, config = {}) ->
+  getOrders: (account, statusId, config = {}) ->
     deferred = Q.defer()
     if (not statusId)
       throw new Error('invallid parameters');
     options =
-      url: @baseUrl + "/api/v1/pedido/search/?situacao_id=#{statusId}&format=json&chave_api=#{liConfig.chave_api}&chave_aplicacao=#{liConfig.chave_aplicacao}"
+      url: @baseUrl + "/api/v1/pedido/search/?situacao_id=#{statusId}&format=json&chave_api=#{account.apiKey}&chave_aplicacao=#{account.appKey}"
 
     if (config.sinceOrder)
       options.url+="&since_numero=#{config.sinceOrder}"
@@ -26,10 +25,10 @@ class LIService
       deferred.resolve body
     return deferred.promise
 
-  getOrder: (orderUri) ->
+  getOrder: (account, orderUri) ->
     deferred = Q.defer()
     options =
-      url: @baseUrl + "#{orderUri}?format=json&chave_api=#{liConfig.chave_api}&chave_aplicacao=#{liConfig.chave_aplicacao}"
+      url: @baseUrl + "#{orderUri}?format=json&chave_api=#{account.apiKey}&chave_aplicacao=#{account.appKey}"
     request options, (err, response, body) ->
       return deferred.reject new Error(err) if err
       deferred.resolve body

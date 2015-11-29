@@ -13,18 +13,18 @@ ONE_MIN = 60 * 1000
 ONE_HOUR = ONE_MIN * 60
 ONE_DAY = ONE_HOUR * 24
 
-makeOrdersRequests = (orders, callback) ->
+makeOrdersRequests = (account, orders, callback) ->
   ordersRequests = []
   _.each orders, (order) ->
-    ordersRequests.push liService.getOrder(order.resource_uri)
+    ordersRequests.push liService.getOrder(account, order.resource_uri)
   Q.all(ordersRequests).then (ordersResult) ->
-    callback ordersResult
+    callback(account, ordersResult)
 
 queryOrders = (account, statusId, params, callback) ->
-  liService.getOrders(statusId, params).then (body) ->
+  liService.getOrders(account, statusId, params).then (body) ->
     body = JSON.parse body
-    makeOrdersRequests(body.objects, (orders) ->
-      callback orders
+    makeOrdersRequests(account, body.objects, (account, orders) ->
+      callback(account,orders)
     )
 
 # CANCELED ORDERS

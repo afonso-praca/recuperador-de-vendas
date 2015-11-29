@@ -2,7 +2,7 @@ mongoose = require 'mongoose'
 orderSchema = require '../models/order'
 Mailer = require '../libs/email'
 Q = require 'q'
-email = new Mailer()
+email = undefined
 
 class Decider
 
@@ -31,7 +31,7 @@ class Decider
     createDate: new Date order.data_criacao
     totalValue: order.valor_total
 
-  _analyseCanceledOrders = (orders) ->
+  _analyseCanceledOrders = (account, orders) ->
     return false if orders.length is 0
     order = JSON.parse(orders[0])
     _CanceledOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
@@ -50,7 +50,7 @@ class Decider
         _analyseCanceledOrders(orders)
     )
 
-  _analysePaymentPendingOrders = (orders) ->
+  _analysePaymentPendingOrders = (account, orders) ->
     return false if orders.length is 0
     order = JSON.parse(orders[0])
     _PaymentPendingOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
@@ -72,7 +72,7 @@ class Decider
         _analysePaymentPendingOrders(orders)
     )
 
-  _analyseDeliveredOrders = (orders) ->
+  _analyseDeliveredOrders = (account, orders) ->
     return false if orders.length is 0
     order = JSON.parse(orders[0])
     _DeliveredOrders.find({ orderId: order.numero }, (error, recoveredOrders) ->
@@ -97,6 +97,7 @@ class Decider
 
   constructor: () ->
     console.log 'Decider started'
+    email = new Mailer()
 
   analyseCanceledOrders: (orders) ->
     _analyseCanceledOrders(orders)
