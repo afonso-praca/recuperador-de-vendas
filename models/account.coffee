@@ -8,5 +8,8 @@ accountSchema = mongoose.Schema
   emailPassword: String
   emailHost: String
   emailUseSSL: Boolean
+  signature: String
+  storeUrl: String
+  surveyUrl: String
 
 module.exports = accountSchema
